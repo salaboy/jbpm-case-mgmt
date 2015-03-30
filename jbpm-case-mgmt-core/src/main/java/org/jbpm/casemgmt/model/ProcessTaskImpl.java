@@ -15,6 +15,7 @@
  */
 package org.jbpm.casemgmt.model;
 
+import java.util.Map;
 import org.jbpm.casemgmt.api.ProcessTask;
 
 /**
@@ -27,7 +28,7 @@ public class ProcessTaskImpl implements ProcessTask {
 
     private Long id;
     private String name;
-
+    private Map<String, Object> params;
     public ProcessTaskImpl() {
         this.id = ++idGenerator;
     }
@@ -45,5 +46,20 @@ public class ProcessTaskImpl implements ProcessTask {
     @Override
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    @Override
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
     }
 }

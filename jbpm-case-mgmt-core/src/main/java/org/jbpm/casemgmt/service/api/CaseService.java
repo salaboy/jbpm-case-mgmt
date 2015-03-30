@@ -21,6 +21,8 @@ import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
 import org.jbpm.casemgmt.api.ProcessTask;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
+import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.query.QueryFilter;
 
 /**
@@ -39,5 +41,10 @@ public interface CaseService {
     
     void addCaseTask(Long caseId, CaseTask caseTask);
     
+    List<TaskSummary> getAllCaseHumanTasks(Long caseId);
+    
+    List<ProcessInstanceDesc> getAllCaseProcessTasks(Long caseId);
+    
+    List<CaseInstance> getAllCaseCaseTasks(Long caseId);
     
 }

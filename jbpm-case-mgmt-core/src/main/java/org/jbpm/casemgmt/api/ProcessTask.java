@@ -15,6 +15,8 @@
  */
 package org.jbpm.casemgmt.api;
 
+import java.util.Map;
+
 /**
  *
  * @author salaboy
@@ -24,4 +26,10 @@ public interface ProcessTask {
     Long getId();
 
     String getName();
+    
+    void setName(String  name);
+    
+    Map<String, Object> getParams();
+    
+    void setParams(Map<String, Object> params);
 }

@@ -26,9 +26,12 @@ import java.util.List;
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.HumanTask;
+import org.jbpm.casemgmt.api.ProcessTask;
 import org.jbpm.casemgmt.model.HumanTaskImpl;
+import org.jbpm.casemgmt.model.ProcessTaskImpl;
 import org.jbpm.kie.services.impl.KModuleDeploymentUnit;
 import org.jbpm.services.api.model.DeploymentUnit;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.junit.After;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -37,6 +40,7 @@ import org.junit.Test;
 import org.kie.api.KieServices;
 import org.kie.api.builder.ReleaseId;
 import org.kie.api.task.model.Task;
+import org.kie.api.task.model.TaskSummary;
 import org.kie.scanner.MavenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,6 +58,7 @@ public class CaseServiceImplTest extends CaseAbstractBaseTest {
         KieServices ks = KieServices.Factory.get();
         ReleaseId releaseId = ks.newReleaseId(GROUP_ID, ARTIFACT_ID, VERSION);
         List<String> processes = new ArrayList<String>();
+        processes.add("repo/processes/general/expenses.bpmn");
         processes.add("repo/processes/general/travel.bpmn");
 
         InternalKieModule kJar1 = createKieJar(ks, releaseId, processes);
@@ -110,7 +115,6 @@ public class CaseServiceImplTest extends CaseAbstractBaseTest {
         deploymentService.deploy(deploymentUnit);
         units.add(deploymentUnit);
 
-        assertNotNull(caseService);
         Long caseId = caseService.createCaseInstance("org.jbpm.examples.checklist.travel", null);
 
         assertNotNull(caseId);
@@ -128,12 +132,21 @@ public class CaseServiceImplTest extends CaseAbstractBaseTest {
         Task task = userTaskService.getTask(caseInstance.getTaskIds().get(0));
         assertEquals("my first case task", task.getName());
         userTaskService.start(caseInstance.getTaskIds().get(0), "salaboy");
-        
-        
+
         List<Long> tasksByProcessId = runtimeDataService.getTasksByProcessInstanceId(caseInstance.getParentAdhocProcessInstance());
         assertEquals(2, tasksByProcessId.size());
-        
 
+        ProcessTask processTask = new ProcessTaskImpl();
+        processTask.setName("com.sample.bpmn");
+        caseService.addProcessTask(caseId, processTask);
+
+        assertEquals(1, caseService.getCaseInstances(null).get(0).getProcessInstanceIds().size());
+
+        List<TaskSummary> ts = caseService.getAllCaseHumanTasks(caseId);
+        assertEquals(3, ts.size());
+        
+        List<ProcessInstanceDesc> processInstances = caseService.getAllCaseProcessTasks(caseId);
+        assertEquals(2, processInstances.size());
     }
 
 }

@@ -32,8 +32,10 @@ import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.RuntimeDataService;
 import org.jbpm.services.api.UserTaskService;
 import org.jbpm.services.api.model.DeployedUnit;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.jbpm.services.task.utils.TaskFluent;
 import org.kie.api.task.model.Task;
+import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.query.QueryFilter;
 import org.kie.internal.task.api.InternalTaskService;
 
@@ -69,6 +71,8 @@ public class CaseServiceCDIImpl implements CaseService {
         return new ArrayList<CaseInstance>(caseInstances.values());
     }
 
+    
+    
     @Override
     public Long createCaseInstance(String caseId, Map<String, Object> params) {
         DeployedUnit du = deploymentService.getDeployedUnits().iterator().next();
@@ -107,18 +111,55 @@ public class CaseServiceCDIImpl implements CaseService {
     public void addHumanTask(Long caseId, HumanTask humanTask) {
         Task task = transformHumanTask(caseId, humanTask);
         Long taskId = internalTaskService.addTask(task, (Map) null);
-        caseInstances.get(caseId).addTaskId(taskId);
+        caseInstances.get(caseId).addHumanTaskId(taskId);
     }
 
     @Override
     public void addProcessTask(Long caseId, ProcessTask processTask) {
-
+        DeployedUnit du = deploymentService.getDeployedUnits().iterator().next();
+        Long processId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), processTask.getName(), processTask.getParams());
+        caseInstances.get(caseId).addProcessTaskId(processId);
     }
 
+    
+    
     @Override
     public void addCaseTask(Long caseId, CaseTask caseTask) {
 
     }
+
+    @Override
+    public List<TaskSummary> getAllCaseHumanTasks(Long caseId) {
+        CaseInstance caseInstance = caseInstances.get(caseId);
+        
+        Long parentProcessId = caseInstance.getParentAdhocProcessInstance();
+        
+        List<TaskSummary> parentProcessTasksIds = runtimeDataService.getTasksByStatusByProcessInstanceId(parentProcessId, null, null);
+        List<TaskSummary> childrenTasks = new ArrayList<TaskSummary>();
+        for(Long id : caseInstance.getProcessInstanceIds()){
+             childrenTasks.addAll(runtimeDataService.getTasksByStatusByProcessInstanceId(id, null, null));
+        }
+        parentProcessTasksIds.addAll(childrenTasks);
+        return parentProcessTasksIds;
+    }
+
+    @Override
+    public List<ProcessInstanceDesc> getAllCaseProcessTasks(Long caseId) {
+        CaseInstance caseInstance = caseInstances.get(caseId);
+        List<ProcessInstanceDesc> processInstances = new ArrayList<ProcessInstanceDesc>();
+        processInstances.add(runtimeDataService.getProcessInstanceById(caseInstance.getParentAdhocProcessInstance()));
+        for(Long id : caseInstance.getProcessInstanceIds()){
+             processInstances.add(runtimeDataService.getProcessInstanceById(caseInstance.getParentAdhocProcessInstance()));
+        }
+        return processInstances;
+    }
+
+    @Override
+    public List<CaseInstance> getAllCaseCaseTasks(Long caseId) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+    
+    
 
     private Task transformHumanTask(Long caseId, HumanTask humanTask) {
 

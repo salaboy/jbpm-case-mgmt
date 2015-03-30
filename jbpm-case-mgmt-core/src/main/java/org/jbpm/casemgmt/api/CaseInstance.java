@@ -37,7 +37,11 @@ public interface CaseInstance {
 
     void setTaskIds(List<Long> taskIds);
     
-    void addTaskId(Long taskId);
+    void addHumanTaskId(Long taskId);
+    
+    void addProcessTaskId(Long processId);
+    
+    void addCaseTaskId(Long processId);
 
     List<Long> getCaseIds();
 
