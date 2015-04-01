@@ -29,6 +29,9 @@ public class CaseInstanceImpl implements CaseInstance {
     private static Long idGenerator = 0L;
 
     private Long id;
+    private String name;
+    private String description;
+    private String status;
     private Long parentAdhocProcessInstance;
     private List<Long> taskIds; // ?? List<CaseTask>
     private List<Long> processInstanceIds; // ?? List<ProcessTask>
@@ -38,9 +41,41 @@ public class CaseInstanceImpl implements CaseInstance {
         this.id = ++idGenerator;
     }
 
+    public CaseInstanceImpl(String name) {
+        this();
+        this.name = name;
+    }
+
     @Override
     public Long getId() {
         return id;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    @Override
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     @Override

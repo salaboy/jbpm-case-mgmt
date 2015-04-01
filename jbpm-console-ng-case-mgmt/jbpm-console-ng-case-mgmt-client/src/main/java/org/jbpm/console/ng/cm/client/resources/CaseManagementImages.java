@@ -18,10 +18,14 @@ package org.jbpm.console.ng.cm.client.resources;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.ImageResource;
 
 public interface CaseManagementImages extends ClientBundle {
 
     CaseManagementImages INSTANCE = GWT.create(CaseManagementImages.class);
+
+    @Source("org/jbpm/console/ng/cm/public/images/icons/create-grid-icon.png")
+    public ImageResource createCaseGridIcon();
 
    
 

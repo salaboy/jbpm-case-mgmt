@@ -25,6 +25,12 @@ public interface CaseInstance {
     
     Long getId();
     
+    String getName();
+    
+    String getDescription();
+    
+    String getStatus();
+    
     Long getParentAdhocProcessInstance();
 
     void setParentAdhocProcessInstance(Long parentAdhocProcessInstance);

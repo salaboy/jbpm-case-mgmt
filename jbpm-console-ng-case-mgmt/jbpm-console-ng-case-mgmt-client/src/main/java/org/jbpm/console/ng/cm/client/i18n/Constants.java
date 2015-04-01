@@ -31,5 +31,28 @@ public interface Constants extends Messages {
 
     Constants INSTANCE = GWT.create(Constants.class);
 
+    String New_Case();
+
+    String Filters();
+
+    String Id();
+
+    String Case();
+
+    String Description();
+
+    String Status();
+
+    String Actions();
+
+    String Create_Case();
+
+    String Name();
+
+    String No_Cases_Found();
+
+    String Cases_List();
+   
+    String Loading();
     
 }
