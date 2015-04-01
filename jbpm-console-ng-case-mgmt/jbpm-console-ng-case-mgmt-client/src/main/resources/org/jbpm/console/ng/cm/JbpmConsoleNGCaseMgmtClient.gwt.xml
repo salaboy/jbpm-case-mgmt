@@ -28,6 +28,7 @@
   <inherits name="org.jboss.errai.ui.UI" />
   <inherits name="org.uberfire.UberfireClientAPI" />
 
+  <inherits name="org.jbpm.console.ng.cm.JbpmConsoleNGCaseMgmtAPI" />
   <inherits name="org.jbpm.console.ng.ht.JbpmConsoleNGHumanTasksAPI" />
 
   <inherits name="com.github.gwtbootstrap.datetimepicker.Datetimepicker" />

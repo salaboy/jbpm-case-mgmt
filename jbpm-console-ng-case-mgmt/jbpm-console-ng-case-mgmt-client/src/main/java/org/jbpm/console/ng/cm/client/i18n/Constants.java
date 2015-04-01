@@ -54,5 +54,21 @@ public interface Constants extends Messages {
     String Cases_List();
    
     String Loading();
+
+    String Create();
+
+    String Case_Must_Have_A_Name();
+
+    String New_Case_Instance();
+
+    String Provide_Case_Name();
+    
+    String CaseCreatedWithId(String caseId);
+    
+    String Basic();
+    
+    String Advanced();
+    
+    String Case_Name();
     
 }
