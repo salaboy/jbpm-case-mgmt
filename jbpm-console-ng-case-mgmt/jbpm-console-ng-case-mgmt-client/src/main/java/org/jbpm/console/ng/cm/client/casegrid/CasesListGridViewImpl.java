@@ -56,6 +56,7 @@ import org.jbpm.console.ng.cm.client.resources.CaseManagementImages;
 import org.jbpm.console.ng.cm.model.CaseSummary;
 import org.jbpm.console.ng.cm.model.events.CaseSelectionEvent;
 import org.jbpm.console.ng.cm.model.events.NewCaseEvent;
+import org.jbpm.console.ng.ht.client.editors.quicknewtask.QuickNewTaskPopup;
 
 @Dependent
 public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesListGridPresenter>
@@ -78,6 +79,9 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
 
     @Inject
     private QuickNewCasePopup newCasePopup;
+    
+    @Inject
+    private QuickNewTaskPopup quickNewTaskPopup;
 
 
 
@@ -113,7 +117,7 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
 
                 selectedItem = selectionModel.getLastSelectedObject();
 
-                DefaultPlaceRequest defaultPlaceRequest = new DefaultPlaceRequest("Task Details Multi");
+                DefaultPlaceRequest defaultPlaceRequest = new DefaultPlaceRequest("Case Details Multi");
                 PlaceStatus status = placeManager.getStatus(defaultPlaceRequest);
                
                 if (status == PlaceStatus.CLOSE) {
@@ -122,7 +126,7 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
                 } else if (status == PlaceStatus.OPEN && !close) {
                     caseSelected.fire(new CaseSelectionEvent(selectedItem.getCaseId(), selectedItem.getName()));
                 } else if (status == PlaceStatus.OPEN && close) {
-                    placeManager.closePlace("Task Details Multi");
+                    placeManager.closePlace("Case Details Multi");
                 }
 
             }
@@ -286,14 +290,27 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         List<HasCell<CaseSummary, ?>> cells = new LinkedList<HasCell<CaseSummary, ?>>();
         
 
-        cells.add(new CreateCaseInstanceActionHasCell(constants.Create_Case(), new ActionCell.Delegate<CaseSummary>() {
+        cells.add(new CreateTaskActionHasCell(constants.Create_Task(), new ActionCell.Delegate<CaseSummary>() {
             @Override
             public void execute(CaseSummary caseDefinition) {
-                placeManager.goTo("Case Details Multi");
-               
-                caseSelected.fire(new CaseSelectionEvent(caseDefinition.getCaseId(), caseDefinition.getName()));
+                 quickNewTaskPopup.show(caseDefinition.getCaseId());
             }
         }));
+        
+        cells.add(new CreateProcessActionHasCell(constants.Create_Process(), new ActionCell.Delegate<CaseSummary>() {
+            @Override
+            public void execute(CaseSummary caseDefinition) {
+                
+            }
+        }));
+        
+        cells.add(new CreateSubCaseActionHasCell(constants.Create_SubCase(), new ActionCell.Delegate<CaseSummary>() {
+            @Override
+            public void execute(CaseSummary caseDefinition) {
+                newCasePopup.show();
+            }
+        }));
+
 
         CompositeCell<CaseSummary> cell = new CompositeCell<CaseSummary>(cells);
         Column<CaseSummary, CaseSummary> actionsColumn = new Column<CaseSummary, CaseSummary>(cell) {
@@ -319,18 +336,18 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         selectionModel.setSelected(new CaseSummary(newCase.getNewCaseId(), newCase.getNewCaseName()), true);
     }
 
-    protected class CreateCaseInstanceActionHasCell implements HasCell<CaseSummary, CaseSummary> {
+    protected class CreateProcessActionHasCell implements HasCell<CaseSummary, CaseSummary> {
 
         private ActionCell<CaseSummary> cell;
 
-        public CreateCaseInstanceActionHasCell(String text, ActionCell.Delegate<CaseSummary> delegate) {
+        public CreateProcessActionHasCell(String text, ActionCell.Delegate<CaseSummary> delegate) {
             cell = new ActionCell<CaseSummary>(text, delegate) {
                 @Override
                 public void render(Cell.Context context, CaseSummary value, SafeHtmlBuilder sb) {
                     
                         AbstractImagePrototype imageProto = AbstractImagePrototype.create(images.createCaseGridIcon());
                         SafeHtmlBuilder mysb = new SafeHtmlBuilder();
-                        mysb.appendHtmlConstant("<span title='" + constants.Create_Case() + "' style='margin-right:5px;'>");
+                        mysb.appendHtmlConstant("<span title='" + constants.Create_Process() + "' style='margin-right:5px;'>");
                         mysb.append(imageProto.getSafeHtml());
                         mysb.appendHtmlConstant("</span>");
                         sb.append(mysb.toSafeHtml());
@@ -354,8 +371,80 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
             return object;
         }
     }
-
     
+    
+    protected class CreateTaskActionHasCell implements HasCell<CaseSummary, CaseSummary> {
+
+        private ActionCell<CaseSummary> cell;
+
+        public CreateTaskActionHasCell(String text, ActionCell.Delegate<CaseSummary> delegate) {
+            cell = new ActionCell<CaseSummary>(text, delegate) {
+                @Override
+                public void render(Cell.Context context, CaseSummary value, SafeHtmlBuilder sb) {
+                    
+                        AbstractImagePrototype imageProto = AbstractImagePrototype.create(images.createCaseGridIcon());
+                        SafeHtmlBuilder mysb = new SafeHtmlBuilder();
+                        mysb.appendHtmlConstant("<span title='" + constants.Create_Task() + "' style='margin-right:5px;'>");
+                        mysb.append(imageProto.getSafeHtml());
+                        mysb.appendHtmlConstant("</span>");
+                        sb.append(mysb.toSafeHtml());
+                  
+                }
+            };
+        }
+
+        @Override
+        public Cell<CaseSummary> getCell() {
+            return cell;
+        }
+
+        @Override
+        public FieldUpdater<CaseSummary, CaseSummary> getFieldUpdater() {
+            return null;
+        }
+
+        @Override
+        public CaseSummary getValue(CaseSummary object) {
+            return object;
+        }
+        
+    }
+
+    protected class CreateSubCaseActionHasCell implements HasCell<CaseSummary, CaseSummary> {
+
+        private ActionCell<CaseSummary> cell;
+
+        public CreateSubCaseActionHasCell(String text, ActionCell.Delegate<CaseSummary> delegate) {
+            cell = new ActionCell<CaseSummary>(text, delegate) {
+                @Override
+                public void render(Cell.Context context, CaseSummary value, SafeHtmlBuilder sb) {
+                    
+                        AbstractImagePrototype imageProto = AbstractImagePrototype.create(images.createCaseGridIcon());
+                        SafeHtmlBuilder mysb = new SafeHtmlBuilder();
+                        mysb.appendHtmlConstant("<span title='" + constants.Create_SubCase() + "' style='margin-right:5px;'>");
+                        mysb.append(imageProto.getSafeHtml());
+                        mysb.appendHtmlConstant("</span>");
+                        sb.append(mysb.toSafeHtml());
+                  
+                }
+            };
+        }
+
+        @Override
+        public Cell<CaseSummary> getCell() {
+            return cell;
+        }
+
+        @Override
+        public FieldUpdater<CaseSummary, CaseSummary> getFieldUpdater() {
+            return null;
+        }
+
+        @Override
+        public CaseSummary getValue(CaseSummary object) {
+            return object;
+        }
+    }
 
     private PlaceStatus getPlaceStatus(String place) {
         DefaultPlaceRequest defaultPlaceRequest = new DefaultPlaceRequest(place);

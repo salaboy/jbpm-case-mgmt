@@ -25,7 +25,7 @@ import org.jboss.errai.bus.server.annotations.Service;
 import org.jbpm.console.ng.cm.backend.server.util.CaseSummaryHelper;
 import org.jbpm.console.ng.cm.model.CaseKey;
 import org.jbpm.console.ng.cm.model.CaseSummary;
-import org.jbpm.console.ng.cm.service.CaseService;
+import org.jbpm.console.ng.cm.service.CaseInstancesService;
 import org.jbpm.console.ng.ga.model.QueryFilter;
 
 
@@ -37,17 +37,17 @@ import org.uberfire.paging.PageResponse;
  */
 @Service
 @ApplicationScoped
-public class CaseServiceImpl implements CaseService {
+public class CaseInstancesServiceImpl implements CaseInstancesService {
 
     @Inject
-    private org.jbpm.casemgmt.service.api.CaseService caseService;
+    private org.jbpm.casemgmt.service.api.CaseInstancesService caseService;
 
-    public CaseServiceImpl() {
+    public CaseInstancesServiceImpl() {
     }
 
     @Override
-    public void createCaseInstance(String name, Map<String, Object> params) {
-        caseService.createCaseInstance(name, params);
+    public void createCaseInstance(String caseIdentifier, String deploymentId, String templateName, Map<String, Object> params) {
+        caseService.createCaseInstance(caseIdentifier, deploymentId, templateName, params);
     }
 
     @Override

@@ -115,7 +115,7 @@ public class CaseServiceImplTest extends CaseAbstractBaseTest {
         deploymentService.deploy(deploymentUnit);
         units.add(deploymentUnit);
 
-        Long caseId = caseService.createCaseInstance("org.jbpm.examples.checklist.travel", null);
+        Long caseId = caseService.createCaseInstance("myFirst Case",deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel", null);
 
         assertNotNull(caseId);
         List<String> users = new ArrayList<String>();

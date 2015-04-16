@@ -39,6 +39,16 @@
                 <b:Well>
                     <b:Fieldset>
                         <b:Form type="HORIZONTAL">
+                            <b:ControlGroup ui:field="deploymentIdControlGroup">
+                                <b:ControlLabel>
+                                    <span class="{style.mandatory-field}">*</span>
+                                    <ui:text from="{i18n.DeploymentId}"/>
+                                </b:ControlLabel>
+                                <b:Controls>
+                                    <b:TextBox ui:field="deploymentIdText"/>
+                                    <b:HelpBlock ui:field="deploymentIdHelpLabel"/>
+                                </b:Controls>
+                            </b:ControlGroup>
                             <b:ControlGroup ui:field="caseNameControlGroup">
                                 <b:ControlLabel>
                                     <span class="{style.mandatory-field}">*</span>
@@ -48,6 +58,15 @@
                                     <b:TextBox ui:field="caseNameText"/>
                                     <b:HelpBlock ui:field="caseNameHelpLabel"/>
                                 </b:Controls>
+                            </b:ControlGroup>
+                             <b:ControlGroup>
+                                <b:ControlLabel>
+                                    <g:Label text="{i18n.Case_Template}"/>
+                                </b:ControlLabel>
+                                <b:Controls>
+                                    <b:ListBox ui:field="caseTemplatesListBox"/>
+                                </b:Controls>
+
                             </b:ControlGroup>
                         </b:Form>
                     </b:Fieldset>

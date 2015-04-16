@@ -26,7 +26,7 @@ import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
 import org.jbpm.casemgmt.api.ProcessTask;
 import org.jbpm.casemgmt.model.CaseInstanceImpl;
-import org.jbpm.casemgmt.service.api.CaseService;
+import org.jbpm.casemgmt.service.api.CaseInstancesService;
 import org.jbpm.services.api.DeploymentService;
 import org.jbpm.services.api.ProcessService;
 import org.jbpm.services.api.RuntimeDataService;
@@ -44,7 +44,7 @@ import org.kie.internal.task.api.InternalTaskService;
  * @author salaboy
  */
 @ApplicationScoped
-public class CaseServiceCDIImpl implements CaseService {
+public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
 
     @Inject
     private InternalTaskService internalTaskService;
@@ -63,21 +63,22 @@ public class CaseServiceCDIImpl implements CaseService {
 
     private Map<Long, CaseInstance> caseInstances = new HashMap<Long, CaseInstance>();
 
-    public CaseServiceCDIImpl() {
+    public CaseInstancesServiceCDIImpl() {
     }
 
     @Override
     public List<CaseInstance> getCaseInstances(QueryFilter qf) {
+        
         return new ArrayList<CaseInstance>(caseInstances.values());
     }
 
     
     
     @Override
-    public Long createCaseInstance(String caseId, Map<String, Object> params) {
-        DeployedUnit du = deploymentService.getDeployedUnits().iterator().next();
-        CaseInstance caseInstance = new CaseInstanceImpl();
-        Long parentId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), caseId, params);
+    public Long createCaseInstance(String caseIdentifier, String deploymentId, String caseTemplate, Map<String, Object> params) {
+        DeployedUnit du = deploymentService.getDeployedUnit(deploymentId);
+        CaseInstance caseInstance = new CaseInstanceImpl(caseIdentifier);
+        Long parentId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), caseTemplate, params);
         caseInstance.setParentAdhocProcessInstance(parentId);
         caseInstances.put(caseInstance.getId(), caseInstance);
         return caseInstance.getId();

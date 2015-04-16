@@ -43,7 +43,7 @@ import javax.inject.Inject;
 import org.jbpm.console.ng.cm.client.i18n.Constants;
 import org.jbpm.console.ng.cm.model.events.CaseRefreshedEvent;
 import org.jbpm.console.ng.cm.model.events.NewCaseEvent;
-import org.jbpm.console.ng.cm.service.CaseService;
+import org.jbpm.console.ng.cm.service.CaseInstancesService;
 
 @Dependent
 public class QuickNewCasePopup extends BaseModal {
@@ -62,6 +62,14 @@ public class QuickNewCasePopup extends BaseModal {
     @UiField
     public Tab advancedTab;
 
+    @UiField
+    public TextBox deploymentIdText;
+    
+    @UiField
+    public ControlGroup deploymentIdControlGroup;
+
+    @UiField
+    public HelpBlock deploymentIdHelpLabel;
    
     @UiField
     public TextBox caseNameText;
@@ -69,15 +77,14 @@ public class QuickNewCasePopup extends BaseModal {
     @UiField
     public ControlGroup caseNameControlGroup;
 
-   
-
     @UiField
     public HelpBlock caseNameHelpLabel;
 
-   
-
     @UiField
     public HelpBlock errorMessages;
+    
+    @UiField
+    public ListBox caseTemplatesListBox;
 
     @UiField
     public ControlGroup errorMessagesGroup;
@@ -95,7 +102,7 @@ public class QuickNewCasePopup extends BaseModal {
     private Event<NewCaseEvent> newCaseEvent;
 
     @Inject
-    Caller<CaseService> caseService;
+    Caller<CaseInstancesService> caseService;
 
     private static Binder uiBinder = GWT.create( Binder.class );
 
@@ -131,7 +138,7 @@ public class QuickNewCasePopup extends BaseModal {
 
     private void okButton() {
         if ( validateForm() ) {
-            addTask();
+            createCaseInstance();
         }
     }
 
@@ -144,7 +151,7 @@ public class QuickNewCasePopup extends BaseModal {
             public void onKeyPress( KeyPressEvent event ) {
                 clearErrorMessages();
                 if ( event.getNativeEvent().getKeyCode() == 13 ) {
-                    addTask();
+                    createCaseInstance();
                 }
             }
         };
@@ -152,6 +159,8 @@ public class QuickNewCasePopup extends BaseModal {
 
         caseNameText.setFocus( true );
 
+        caseTemplatesListBox.addItem( "Select Case Template ...", "" );
+        caseTemplatesListBox.addItem( "Ad Hoc Template", "org.jbpm.empty.adhoc" );
        
     }
 
@@ -206,7 +215,7 @@ public class QuickNewCasePopup extends BaseModal {
         notification.fire( new NotificationEvent( text ) );
     }
 
-    private void addTask() {
+    private void createCaseInstance() {
         textKeyPressHandler.removeHandler();
        
 
@@ -216,15 +225,13 @@ public class QuickNewCasePopup extends BaseModal {
             errorMessagesGroup.setType( ControlGroupType.ERROR );
             tabPanel.selectTab( 1 );
         } else {
-            createCase(caseNameText.getText());
+            createCase(caseNameText.getText(), deploymentIdText.getText(), caseTemplatesListBox.getValue(caseTemplatesListBox.getSelectedIndex()));
         }
 
     }
 
 
-    public void createCase( 
-                         final String caseName
-                          ) {
+    public void createCase( final String caseName, final String deploymentId, final String template) {
         
 
         caseService.call( new RemoteCallback<Long>() {
@@ -241,7 +248,7 @@ public class QuickNewCasePopup extends BaseModal {
                 //ErrorPopup.showMessage( "Unexpected error encountered : " + throwable.getMessage() );
                 return true;
             }
-        } ).createCaseInstance(caseName, null);
+        } ).createCaseInstance(caseName, deploymentId, template, null);
 
 
     }
@@ -259,6 +266,7 @@ public class QuickNewCasePopup extends BaseModal {
     private void clearErrorMessages(){
         errorMessages.setText( "" );
         caseNameHelpLabel.setText( "" );
+        deploymentIdHelpLabel.setText("");
         caseNameControlGroup.setType( ControlGroupType.NONE );
     }
 

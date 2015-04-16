@@ -15,7 +15,7 @@
  */
 package org.jbpm.casemgmt.tests;
 
-import org.jbpm.casemgmt.service.api.CaseService;
+import org.jbpm.casemgmt.service.api.CaseInstancesService;
 import org.jbpm.kie.test.util.AbstractBaseTest;
 
 /**
@@ -24,9 +24,9 @@ import org.jbpm.kie.test.util.AbstractBaseTest;
  */
 public class CaseAbstractBaseTest extends AbstractBaseTest {
 
-    protected CaseService caseService;
+    protected CaseInstancesService caseService;
 
-    public void setCaseService(CaseService caseService) {
+    public void setCaseService(CaseInstancesService caseService) {
         this.caseService = caseService;
     }
 }

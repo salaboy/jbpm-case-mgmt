@@ -29,11 +29,11 @@ import org.kie.internal.query.QueryFilter;
  *
  * @author salaboy
  */
-public interface CaseService {
+public interface CaseInstancesService {
     
     List<CaseInstance> getCaseInstances(QueryFilter qf);
     
-    Long createCaseInstance(String name, Map<String, Object> params);
+    Long createCaseInstance(String caseIdentifier, String deploymentId, String template, Map<String, Object> params);
     
     void addHumanTask(Long caseId, HumanTask humanTask);
     

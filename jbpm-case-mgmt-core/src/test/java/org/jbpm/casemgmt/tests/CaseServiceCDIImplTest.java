@@ -24,7 +24,7 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
-import org.jbpm.casemgmt.service.api.CaseService;
+import org.jbpm.casemgmt.service.api.CaseInstancesService;
 import org.jbpm.services.api.DefinitionService;
 import org.jbpm.services.api.DeploymentService;
 import org.jbpm.services.api.ProcessService;
@@ -150,7 +150,7 @@ public class CaseServiceCDIImplTest extends CaseServiceImplTest {
         
         @Inject
 	@Override
-	public void setCaseService(CaseService caseService) {
+	public void setCaseService(CaseInstancesService caseService) {
 		super.setCaseService(caseService);
 	}
 

@@ -137,6 +137,11 @@
       <artifactId>jbpm-console-ng-generic-client</artifactId>
       <type>jar</type>
     </dependency>
+    <dependency>
+      <groupId>org.jbpm</groupId>
+      <artifactId>jbpm-console-ng-human-tasks-client</artifactId>
+      <type>jar</type>
+    </dependency>
   </dependencies>
 
   <build>

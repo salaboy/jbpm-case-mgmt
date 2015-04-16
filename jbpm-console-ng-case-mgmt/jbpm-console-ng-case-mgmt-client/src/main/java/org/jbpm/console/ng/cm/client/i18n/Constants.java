@@ -71,4 +71,14 @@ public interface Constants extends Messages {
     
     String Case_Name();
     
+    String Case_Template();
+    
+    String DeploymentId();
+
+    String Create_Task();
+
+    String Create_Process();
+
+     String Create_SubCase();
+    
 }

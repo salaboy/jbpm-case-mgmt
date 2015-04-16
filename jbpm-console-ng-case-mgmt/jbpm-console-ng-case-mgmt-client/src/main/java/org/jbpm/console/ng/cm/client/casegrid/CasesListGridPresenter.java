@@ -29,7 +29,7 @@ import org.jboss.errai.common.client.api.ErrorCallback;
 import org.jboss.errai.common.client.api.RemoteCallback;
 import org.jbpm.console.ng.cm.client.i18n.Constants;
 import org.jbpm.console.ng.cm.model.CaseSummary;
-import org.jbpm.console.ng.cm.service.CaseService;
+import org.jbpm.console.ng.cm.service.CaseInstancesService;
 import org.jbpm.console.ng.ga.model.PortableQueryFilter;
 import org.jbpm.console.ng.gc.client.list.base.AbstractListView.ListView;
 import org.jbpm.console.ng.gc.client.list.base.AbstractScreenListPresenter;
@@ -56,7 +56,7 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
 
 
   @Inject
-  private Caller<CaseService> casesService;
+  private Caller<CaseInstancesService> casesService;
   
  
 
