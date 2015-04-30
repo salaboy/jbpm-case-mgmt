@@ -78,6 +78,8 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
     public Long createCaseInstance(String caseIdentifier, String deploymentId, String caseTemplate, Map<String, Object> params) {
         DeployedUnit du = deploymentService.getDeployedUnit(deploymentId);
         CaseInstance caseInstance = new CaseInstanceImpl(caseIdentifier);
+        caseInstance.setDescription("Case Description Here...");
+        caseInstance.setStatus("Case Status Here...");
         Long parentId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), caseTemplate, params);
         caseInstance.setParentAdhocProcessInstance(parentId);
         caseInstances.put(caseInstance.getId(), caseInstance);

@@ -65,6 +65,7 @@ public class CaseInstanceImpl implements CaseInstance {
         return description;
     }
 
+    @Override
     public void setDescription(String description) {
         this.description = description;
     }
@@ -74,6 +75,7 @@ public class CaseInstanceImpl implements CaseInstance {
         return status;
     }
 
+    @Override
     public void setStatus(String status) {
         this.status = status;
     }

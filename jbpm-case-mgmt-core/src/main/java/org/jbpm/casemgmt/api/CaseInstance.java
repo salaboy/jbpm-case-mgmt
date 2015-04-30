@@ -30,6 +30,10 @@ public interface CaseInstance {
     String getDescription();
     
     String getStatus();
+
+    void setDescription(String desc);
+
+    void setStatus(String status);
     
     Long getParentAdhocProcessInstance();
 

@@ -92,4 +92,19 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public List<CaseSummary> getAll(QueryFilter filter) {
+        String stringFilter = "";
+        if (filter.getParams() != null) {
+
+            stringFilter = (String) filter.getParams().get("filter");
+        }
+
+        org.kie.internal.query.QueryFilter qf = new org.kie.internal.query.QueryFilter(filter.getOffset(), filter.getCount() + 1,
+                filter.getOrderBy(), filter.isAscending());
+        qf.setFilterParams(filter.getFilterParams());
+
+        return CaseSummaryHelper.adaptCollection(caseService.getCaseInstances(qf));
+    }
+
 }

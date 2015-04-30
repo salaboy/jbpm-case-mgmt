@@ -38,6 +38,7 @@ import org.jbpm.console.ng.gc.client.list.base.AbstractListView;
 
 
 import org.jbpm.console.ng.ht.model.events.TaskRefreshedEvent;
+import org.jbpm.console.ng.pr.forms.client.editors.quicknewinstance.QuickNewProcessInstancePopup;
 import org.uberfire.ext.services.shared.preferences.GridGlobalPreferences;
 import org.uberfire.client.mvp.PlaceStatus;
 import org.uberfire.ext.widgets.common.client.tables.ColumnMeta;
@@ -83,6 +84,9 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
     @Inject
     private QuickNewTaskPopup quickNewTaskPopup;
 
+    @Inject
+    private QuickNewProcessInstancePopup quickNewProcessInstancePopup;
+
 
 
     @Override
@@ -90,8 +94,9 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         List<String> bannedColumns = new ArrayList<String>();
         bannedColumns.add(constants.Id());
         List<String> initColumns = new ArrayList<String>();
-        initColumns.add(constants.Name());
+        initColumns.add(constants.Case());
         initColumns.add(constants.Description());
+        initColumns.add(constants.Status());
         super.init(presenter, new GridGlobalPreferences("CaseListGrid", initColumns, bannedColumns));
 
         
@@ -300,7 +305,7 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         cells.add(new CreateProcessActionHasCell(constants.Create_Process(), new ActionCell.Delegate<CaseSummary>() {
             @Override
             public void execute(CaseSummary caseDefinition) {
-                
+                quickNewProcessInstancePopup.show(caseDefinition.getCaseId());
             }
         }));
         

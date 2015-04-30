@@ -12,3 +12,4 @@
 hs_err_pid*
 /jbpm-case-mgmt-core/target/
 *.tlog
+.idea/
