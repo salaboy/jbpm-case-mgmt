@@ -34,7 +34,7 @@ public class CaseSummaryHelper {
     }
     
     public static CaseSummary adapt(CaseInstance caseInstance) { 
-        return new CaseSummary(caseInstance.getId(), caseInstance.getName(), caseInstance.getDescription(),caseInstance.getStatus());
+        return new CaseSummary(caseInstance.getParentAdhocProcessInstance(), caseInstance.getName(), caseInstance.getDescription(),caseInstance.getStatus());
     
     }
 
