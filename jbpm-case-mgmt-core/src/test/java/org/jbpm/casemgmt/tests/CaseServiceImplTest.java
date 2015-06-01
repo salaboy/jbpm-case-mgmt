@@ -29,6 +29,7 @@ import org.jbpm.casemgmt.api.HumanTask;
 import org.jbpm.casemgmt.api.ProcessTask;
 import org.jbpm.casemgmt.model.HumanTaskImpl;
 import org.jbpm.casemgmt.model.ProcessTaskImpl;
+import org.jbpm.casemgmt.service.api.CaseInstancesService;
 import org.jbpm.kie.services.impl.KModuleDeploymentUnit;
 import org.jbpm.services.api.model.DeploymentUnit;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
@@ -45,12 +46,12 @@ import org.kie.scanner.MavenRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class CaseServiceImplTest extends CaseAbstractBaseTest {
+public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
 
     private static final Logger logger = LoggerFactory.getLogger(CaseServiceImplTest.class);
 
     private List<DeploymentUnit> units = new ArrayList<DeploymentUnit>();
-
+    
     @Before
     public void prepare() {
         configureServices();

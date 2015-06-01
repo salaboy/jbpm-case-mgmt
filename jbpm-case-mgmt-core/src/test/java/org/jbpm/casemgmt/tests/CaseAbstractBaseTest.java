@@ -22,8 +22,8 @@ import org.jbpm.kie.test.util.AbstractBaseTest;
  *
  * @author salaboy
  */
-public class CaseAbstractBaseTest extends AbstractBaseTest {
-
+public abstract class CaseAbstractBaseTest extends AbstractBaseTest {
+    
     protected CaseInstancesService caseService;
 
     public void setCaseService(CaseInstancesService caseService) {

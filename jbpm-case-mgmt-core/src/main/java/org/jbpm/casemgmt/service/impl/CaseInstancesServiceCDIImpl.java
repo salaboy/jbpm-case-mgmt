@@ -113,7 +113,7 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
     @Override
     public void addHumanTask(Long caseId, HumanTask humanTask) {
         Task task = transformHumanTask(caseId, humanTask);
-        Long taskId = internalTaskService.addTask(task, (Map) null);
+        Long taskId = internalTaskService.addTask(task, new HashMap<String, Object>());
         caseInstances.get(caseId).addHumanTaskId(taskId);
     }
 
