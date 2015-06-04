@@ -73,12 +73,23 @@ public class QuickNewCasePopup extends BaseModal {
    
     @UiField
     public TextBox caseNameText;
+    
+   
 
     @UiField
     public ControlGroup caseNameControlGroup;
 
     @UiField
     public HelpBlock caseNameHelpLabel;
+    
+    @UiField
+    public TextBox recipientText;
+     
+    @UiField
+    public ControlGroup recipientControlGroup;
+
+    @UiField
+    public HelpBlock recipientHelpLabel;
 
     @UiField
     public HelpBlock errorMessages;
@@ -225,13 +236,13 @@ public class QuickNewCasePopup extends BaseModal {
             errorMessagesGroup.setType( ControlGroupType.ERROR );
             tabPanel.selectTab( 1 );
         } else {
-            createCase(caseNameText.getText(), deploymentIdText.getText(), caseTemplatesListBox.getValue(caseTemplatesListBox.getSelectedIndex()));
+            createCase(caseNameText.getText(), recipientText.getText(), deploymentIdText.getText(), caseTemplatesListBox.getValue(caseTemplatesListBox.getSelectedIndex()));
         }
 
     }
 
 
-    public void createCase( final String caseName, final String deploymentId, final String template) {
+    public void createCase( final String caseName,  final String recipient, final String deploymentId, final String template) {
         
 
         caseService.call( new RemoteCallback<Long>() {
@@ -248,7 +259,7 @@ public class QuickNewCasePopup extends BaseModal {
                 //ErrorPopup.showMessage( "Unexpected error encountered : " + throwable.getMessage() );
                 return true;
             }
-        } ).createCaseInstance(caseName, deploymentId, template, null);
+        } ).createCaseInstance(caseName, recipient, deploymentId, template, null);
 
 
     }

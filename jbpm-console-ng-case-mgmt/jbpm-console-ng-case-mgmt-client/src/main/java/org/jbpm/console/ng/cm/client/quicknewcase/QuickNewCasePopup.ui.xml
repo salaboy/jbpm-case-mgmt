@@ -59,6 +59,16 @@
                                     <b:HelpBlock ui:field="caseNameHelpLabel"/>
                                 </b:Controls>
                             </b:ControlGroup>
+                             <b:ControlGroup ui:field="recipientControlGroup">
+                                <b:ControlLabel>
+                                    <span class="{style.mandatory-field}">*</span>
+                                    <ui:text from="{i18n.Recipient}"/>
+                                </b:ControlLabel>
+                                <b:Controls>
+                                    <b:TextBox ui:field="recipientText"/>
+                                    <b:HelpBlock ui:field="recipientHelpLabel"/>
+                                </b:Controls>
+                            </b:ControlGroup>
                              <b:ControlGroup>
                                 <b:ControlLabel>
                                     <g:Label text="{i18n.Case_Template}"/>

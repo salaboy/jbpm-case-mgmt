@@ -79,6 +79,7 @@ public interface Constants extends Messages {
 
     String Create_Process();
 
-     String Create_SubCase();
+    String Create_SubCase();
     
+    String Recipient();
 }

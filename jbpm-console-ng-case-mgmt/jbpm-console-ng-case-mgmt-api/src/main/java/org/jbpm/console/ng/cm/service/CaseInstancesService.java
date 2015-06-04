@@ -28,7 +28,7 @@ import org.jbpm.console.ng.ga.service.GenericServiceEntryPoint;
 @Remote
 public interface CaseInstancesService extends GenericServiceEntryPoint<CaseKey, CaseSummary>{
 
-    void createCaseInstance(String caseIdentifier, String deploymentId, String template, Map<String, Object> params);
+    void createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String template, Map<String, Object> params);
 
     
 

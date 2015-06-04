@@ -25,6 +25,7 @@ public class CaseSummary extends GenericSummary {
     private String caseName;
     private String description;
     private String status;
+    private String recipient;
 
     public CaseSummary() {
     }
@@ -35,12 +36,13 @@ public class CaseSummary extends GenericSummary {
         this.caseName = caseName;
     }
 
-    public CaseSummary(long caseId, String caseName, String description, String status) {
+    public CaseSummary(long caseId, String caseName, String description, String status, String recipient) {
         super();
         this.caseId = caseId;
         this.caseName = caseName;
         this.description = description;
         this.status = status;
+        this.recipient = recipient;
     }
 
     public Long getCaseId() {
@@ -74,5 +76,20 @@ public class CaseSummary extends GenericSummary {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String getRecipient() {
+        return recipient;
+    }
+
+    public void setRecipient(String recipient) {
+        this.recipient = recipient;
+    }
+
+    @Override
+    public String toString() {
+        return "CaseSummary{" + "caseId=" + caseId + ", caseName=" + caseName + ", description=" + description + ", status=" + status + ", recipient=" + recipient + '}';
+    }
+    
+    
 
 }

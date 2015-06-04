@@ -95,6 +95,7 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         bannedColumns.add(constants.Id());
         List<String> initColumns = new ArrayList<String>();
         initColumns.add(constants.Case());
+        initColumns.add(constants.Recipient());
         initColumns.add(constants.Description());
         initColumns.add(constants.Status());
         super.init(presenter, new GridGlobalPreferences("CaseListGrid", initColumns, bannedColumns));
@@ -197,14 +198,14 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         Column descriptionColumn = initTaskDescriptionColumn();
         
         Column statusColumn = initTaskStatusColumn();
-       
+        Column recipientColumn = initCaseRecipientColumn();
         actionsColumn = initActionsColumn();
 
         List<ColumnMeta<CaseSummary>> columnMetas = new ArrayList<ColumnMeta<CaseSummary>>();
         columnMetas.add(new ColumnMeta<CaseSummary>(taskIdColumn, constants.Id()));
         columnMetas.add(new ColumnMeta<CaseSummary>(taskNameColumn, constants.Case()));
         columnMetas.add(new ColumnMeta<CaseSummary>(descriptionColumn, constants.Description()));
-        
+        columnMetas.add(new ColumnMeta<CaseSummary>(recipientColumn, constants.Recipient()));
         columnMetas.add(new ColumnMeta<CaseSummary>(statusColumn, constants.Status()));
         
         columnMetas.add(new ColumnMeta<CaseSummary>(actionsColumn, constants.Actions()));
@@ -284,7 +285,17 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
         return statusColumn;
     }
 
-    
+    private Column initCaseRecipientColumn() {
+        Column<CaseSummary, String> recipientColumn = new Column<CaseSummary, String>(new TextCell()) {
+            @Override
+            public String getValue(CaseSummary object) {
+                return object.getRecipient();
+            }
+        };
+        recipientColumn.setSortable(true);
+        recipientColumn.setDataStoreName("c.recipient");
+        return recipientColumn;
+    }
 
     
     public void onCaseRefreshedEvent(@Observes TaskRefreshedEvent event) {

@@ -45,6 +45,8 @@ import org.uberfire.paging.PageResponse;
 @WorkbenchScreen(identifier = "Cases List")
 public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSummary> {
 
+  
+
   public interface CaseListView extends ListView<CaseSummary, CasesListGridPresenter> {
 
     }
@@ -62,7 +64,7 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
 
   
 
-  private TaskType currentStatusFilter = TaskUtils.TaskType.ACTIVE;
+  
 
   public CasesListGridPresenter() {
     dataProvider = new AsyncDataProvider<CaseSummary>() {
@@ -71,7 +73,20 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
       protected void onRangeChanged(HasData<CaseSummary> display) {
         view.showBusyIndicator(constants.Loading());
         final Range visibleRange = display.getVisibleRange();
-        ColumnSortList columnSortList = view.getListGrid().getColumnSortList();
+          getData(visibleRange);
+
+      }
+    };
+  }
+
+  @Override
+    protected ListView getListView() {
+        return view;
+    }
+
+    @Override
+    public void getData(Range visibleRange) {
+       ColumnSortList columnSortList = view.getListGrid().getColumnSortList();
         if (currentFilter == null) {
           currentFilter = new PortableQueryFilter(visibleRange.getStart(),
                   visibleRange.getLength(),
@@ -95,8 +110,8 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
           currentFilter.setCount(view.getListGrid().getPageSize());
         }
         
-        currentFilter.getParams().put("statuses", TaskUtils.getStatusByType(currentStatusFilter));
-        currentFilter.getParams().put("filter", currentStatusFilter.toString());
+        
+        
         currentFilter.getParams().put("userId", identity.getIdentifier());
         
         currentFilter.setOrderBy((columnSortList.size() > 0) ? columnSortList.get(0)
@@ -107,11 +122,7 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
         casesService.call(new RemoteCallback<PageResponse<CaseSummary>>() {
           @Override
           public void callback(PageResponse<CaseSummary> response) {
-            view.hideBusyIndicator();
-            dataProvider.updateRowCount(response.getTotalRowSize(),
-                    response.isTotalRowSizeExact());
-            dataProvider.updateRowData(response.getStartRowIndex(),
-                    response.getPageRowList());
+              updateDataOnCallback(response);
           }
         }, new ErrorCallback<Message>() {
           @Override
@@ -122,12 +133,7 @@ public class CasesListGridPresenter extends AbstractScreenListPresenter<CaseSumm
             return true;
           }
         }).getData(currentFilter);
-
-      }
-    };
-  }
-
-
+    }
  
   
   @WorkbenchPartTitle

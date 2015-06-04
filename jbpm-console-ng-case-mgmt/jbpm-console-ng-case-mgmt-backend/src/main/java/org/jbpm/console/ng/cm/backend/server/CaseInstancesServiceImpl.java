@@ -46,8 +46,8 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
     }
 
     @Override
-    public void createCaseInstance(String caseIdentifier, String deploymentId, String templateName, Map<String, Object> params) {
-        caseService.createCaseInstance(caseIdentifier, deploymentId, templateName, params);
+    public void createCaseInstance(String caseIdentifier,String recipient, String deploymentId, String templateName, Map<String, Object> params) {
+        caseService.createCaseInstance(caseIdentifier,recipient,  deploymentId, templateName, params);
     }
 
     @Override
