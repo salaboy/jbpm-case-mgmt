@@ -115,8 +115,11 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
 
         deploymentService.deploy(deploymentUnit);
         units.add(deploymentUnit);
-
-        Long caseId = caseService.createCaseInstance("myFirst Case",deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel", null);
+        MockCaseInstanceLifeCycleListener mockCaseInstanceLifeCycleListener = new MockCaseInstanceLifeCycleListener();
+        caseService.registerLifeCycleListener(mockCaseInstanceLifeCycleListener);
+        
+        Long caseId = caseService.createCaseInstance("myFirst Case","salaboy@gmail.com",
+                                            deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel", null);
 
         assertNotNull(caseId);
         List<String> users = new ArrayList<String>();
@@ -148,6 +151,19 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
         
         List<ProcessInstanceDesc> processInstances = caseService.getAllCaseProcessTasks(caseId);
         assertEquals(2, processInstances.size());
+        for(ProcessInstanceDesc pid : processInstances){
+            System.out.println("PID parent: "+pid.getParentId());
+            //Assert that one is the parent and the other the child
+        }
+        
+        caseService.suspendCaseInstance(caseId);
+        
+        caseService.activateCaseInstance(caseId);
+        
+        for(String log : mockCaseInstanceLifeCycleListener.getLogs()){
+            System.out.println(log);
+        }
+        
     }
 
 }

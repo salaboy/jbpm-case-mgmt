@@ -21,6 +21,7 @@ import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
 import org.jbpm.casemgmt.api.ProcessTask;
+import org.jbpm.casemgmt.model.CaseInstanceImpl.CaseStatus;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
 import org.kie.api.task.model.TaskSummary;
 import org.kie.internal.query.QueryFilter;
@@ -33,7 +34,17 @@ public interface CaseInstancesService {
     
     List<CaseInstance> getCaseInstances(QueryFilter qf);
     
-    Long createCaseInstance(String caseIdentifier, String deploymentId, String template, Map<String, Object> params);
+    Long createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String template, Map<String, Object> params);
+    
+    void registerLifeCycleListener(CaseInstanceLifeCycleListener listener);
+    
+    void activateCaseInstance(Long caseId);
+    
+    void closeCaseInstance(Long caseId);
+    
+    void terminateCaseInstance(Long caseId);
+    
+    void suspendCaseInstance(Long caseId);
     
     void addHumanTask(Long caseId, HumanTask humanTask);
     

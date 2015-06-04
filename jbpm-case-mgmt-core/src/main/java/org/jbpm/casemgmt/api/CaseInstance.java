@@ -16,6 +16,7 @@
 package org.jbpm.casemgmt.api;
 
 import java.util.List;
+import org.jbpm.casemgmt.model.CaseInstanceImpl;
 
 /**
  *
@@ -27,13 +28,17 @@ public interface CaseInstance {
     
     String getName();
     
+    String getRecipient();
+
+    void setRecipient(String recipient);
+    
     String getDescription();
     
-    String getStatus();
+    CaseInstanceImpl.CaseStatus getStatus();
 
     void setDescription(String desc);
 
-    void setStatus(String status);
+    void setStatus(CaseInstanceImpl.CaseStatus status);
     
     Long getParentAdhocProcessInstance();
 

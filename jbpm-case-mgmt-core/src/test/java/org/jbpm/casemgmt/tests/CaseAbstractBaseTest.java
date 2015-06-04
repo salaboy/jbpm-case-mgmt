@@ -16,13 +16,13 @@
 package org.jbpm.casemgmt.tests;
 
 import org.jbpm.casemgmt.service.api.CaseInstancesService;
-import org.jbpm.kie.test.util.AbstractBaseTest;
+import org.jbpm.kie.test.util.AbstractKieServicesBaseTest;
 
 /**
  *
  * @author salaboy
  */
-public abstract class CaseAbstractBaseTest extends AbstractBaseTest {
+public abstract class CaseAbstractBaseTest extends AbstractKieServicesBaseTest {
     
     protected CaseInstancesService caseService;
 
