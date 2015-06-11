@@ -33,8 +33,6 @@ import org.jbpm.console.ng.cm.service.CaseInstancesService;
 import org.jbpm.console.ng.ga.model.PortableQueryFilter;
 import org.jbpm.console.ng.gc.client.list.base.AbstractListView.ListView;
 import org.jbpm.console.ng.gc.client.list.base.AbstractScreenListPresenter;
-import org.jbpm.console.ng.gc.client.util.TaskUtils;
-import org.jbpm.console.ng.gc.client.util.TaskUtils.TaskType;
 import org.uberfire.client.annotations.WorkbenchPartTitle;
 import org.uberfire.client.annotations.WorkbenchPartView;
 import org.uberfire.client.annotations.WorkbenchScreen;

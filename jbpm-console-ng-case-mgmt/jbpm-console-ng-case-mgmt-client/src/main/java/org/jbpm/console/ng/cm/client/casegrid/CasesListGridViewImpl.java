@@ -128,9 +128,9 @@ public class CasesListGridViewImpl extends AbstractListView<CaseSummary, CasesLi
                
                 if (status == PlaceStatus.CLOSE) {
                     placeManager.goTo(defaultPlaceRequest);
-                    caseSelected.fire(new CaseSelectionEvent(selectedItem.getCaseId(), selectedItem.getName()));
+                    caseSelected.fire(new CaseSelectionEvent(selectedItem.getCaseId(), selectedItem.getCaseName()));
                 } else if (status == PlaceStatus.OPEN && !close) {
-                    caseSelected.fire(new CaseSelectionEvent(selectedItem.getCaseId(), selectedItem.getName()));
+                    caseSelected.fire(new CaseSelectionEvent(selectedItem.getCaseId(), selectedItem.getCaseName()));
                 } else if (status == PlaceStatus.OPEN && close) {
                     placeManager.closePlace("Case Details Multi");
                 }

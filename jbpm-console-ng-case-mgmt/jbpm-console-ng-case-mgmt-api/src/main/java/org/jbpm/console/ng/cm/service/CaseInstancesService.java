@@ -15,7 +15,6 @@
  */
 package org.jbpm.console.ng.cm.service;
 
-import java.util.Map;
 import org.jboss.errai.bus.server.annotations.Remote;
 import org.jbpm.console.ng.cm.model.CaseKey;
 import org.jbpm.console.ng.cm.model.CaseSummary;
@@ -28,8 +27,9 @@ import org.jbpm.console.ng.ga.service.GenericServiceEntryPoint;
 @Remote
 public interface CaseInstancesService extends GenericServiceEntryPoint<CaseKey, CaseSummary>{
 
-    void createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String template, Map<String, Object> params);
+    void createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String template);
 
+    
     
 
 }

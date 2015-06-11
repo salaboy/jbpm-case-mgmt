@@ -22,11 +22,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 import org.jboss.errai.bus.server.annotations.Service;
+import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.console.ng.cm.backend.server.util.CaseSummaryHelper;
 import org.jbpm.console.ng.cm.model.CaseKey;
 import org.jbpm.console.ng.cm.model.CaseSummary;
 import org.jbpm.console.ng.cm.service.CaseInstancesService;
 import org.jbpm.console.ng.ga.model.QueryFilter;
+import org.jbpm.services.api.model.ProcessInstanceDesc;
+import org.kie.api.task.model.TaskSummary;
 
 
 import org.uberfire.paging.PageResponse;
@@ -46,9 +49,10 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
     }
 
     @Override
-    public void createCaseInstance(String caseIdentifier,String recipient, String deploymentId, String templateName, Map<String, Object> params) {
-        caseService.createCaseInstance(caseIdentifier,recipient,  deploymentId, templateName, params);
+    public void createCaseInstance(String caseIdentifier,String recipient, String deploymentId, String templateName) {
+        caseService.createCaseInstance(caseIdentifier,recipient,  deploymentId, templateName);
     }
+    
 
     @Override
     public PageResponse<CaseSummary> getData(QueryFilter filter) {
@@ -89,7 +93,25 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
 
     @Override
     public CaseSummary getItem(CaseKey key) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        CaseInstance caseInstanceById = caseService.getCaseInstanceById(key.getCaseId());
+        CaseSummary caseSummary = new CaseSummary(key.getCaseId(), caseInstanceById.getName(), 
+                            caseInstanceById.getDescription(), caseInstanceById.getStatus().name(), 
+                            caseInstanceById.getRecipient());
+        List<TaskSummary> allCaseHumanTasks = caseService.getAllCaseHumanTasks(key.getCaseId());
+        String humanTaskDetails = "";
+        for(TaskSummary ts : allCaseHumanTasks){
+            humanTaskDetails += ts.toString() + "\n";
+        }
+        caseSummary.setHumanTasksDetails(humanTaskDetails);
+        
+        List<ProcessInstanceDesc> allCaseProcessTasks = caseService.getAllCaseProcessTasks(key.getCaseId());
+        String processesDetails = "";
+        for(ProcessInstanceDesc pid : allCaseProcessTasks){
+            processesDetails += pid.toString() + "\n";
+        }
+        caseSummary.setProcessesDetails(processesDetails);
+        return caseSummary;
     }
 
     @Override

@@ -259,7 +259,7 @@ public class QuickNewCasePopup extends BaseModal {
                 //ErrorPopup.showMessage( "Unexpected error encountered : " + throwable.getMessage() );
                 return true;
             }
-        } ).createCaseInstance(caseName, recipient, deploymentId, template, null);
+        } ).createCaseInstance(caseName, recipient, deploymentId, template  );
 
 
     }

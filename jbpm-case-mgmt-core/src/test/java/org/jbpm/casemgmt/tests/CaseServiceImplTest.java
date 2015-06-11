@@ -119,7 +119,7 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
         caseService.registerLifeCycleListener(mockCaseInstanceLifeCycleListener);
         
         Long caseId = caseService.createCaseInstance("myFirst Case","salaboy@gmail.com",
-                                            deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel", null);
+                                            deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel");
 
         assertNotNull(caseId);
         List<String> users = new ArrayList<String>();

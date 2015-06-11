@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
@@ -46,32 +44,32 @@ import org.kie.internal.query.QueryFilter;
  *
  * @author salaboy
  */
-@ApplicationScoped
-public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
 
-    @Inject
-    private AdHocUserTaskService adHocTaskService;
+public class CaseInstancesServiceImpl implements CaseInstancesService {
 
-    @Inject
-    private ProcessService processService;
+    
+    protected AdHocUserTaskService adHocTaskService;
 
-    @Inject
-    private AdHocProcessService adHocProcessService;
+    
+    protected ProcessService processService;
 
-    @Inject
-    private RuntimeDataService runtimeDataService;
+    
+    protected AdHocProcessService adHocProcessService;
 
-    @Inject
-    private UserTaskService userTaskService;
+    
+    protected RuntimeDataService runtimeDataService;
 
-    @Inject
-    private DeploymentService deploymentService;
+    
+    protected UserTaskService userTaskService;
 
-    private Map<Long, CaseInstance> caseInstances = new HashMap<Long, CaseInstance>();
+    
+    protected DeploymentService deploymentService;
 
-    private List<CaseInstanceLifeCycleListener> listeners = new ArrayList<CaseInstanceLifeCycleListener>();
+    protected Map<Long, CaseInstance> caseInstances = new HashMap<Long, CaseInstance>();
 
-    public CaseInstancesServiceCDIImpl() {
+    protected List<CaseInstanceLifeCycleListener> listeners = new ArrayList<CaseInstanceLifeCycleListener>();
+
+    public CaseInstancesServiceImpl() {
     }
 
     @Override
@@ -86,19 +84,19 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
     }
 
     @Override
-    public Long createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String caseTemplate, Map<String, Object> params) {
+    public Long createCaseInstance(String caseIdentifier, String recipient, String deploymentId, String caseTemplate) {
 
         CaseInstance caseInstance = new CaseInstanceImpl(caseIdentifier);
         caseInstance.setDescription("Case Description Here...");
         caseInstance.setRecipient(recipient);
         caseInstances.put(caseInstance.getId(), caseInstance);
 
-        activateCaseInstance(caseInstance.getId(), deploymentId, caseTemplate, params);
+        activateCaseInstance(caseInstance.getId(), deploymentId, caseTemplate);
 
         return caseInstance.getId();
     }
 
-    private void activateCaseInstance(Long caseId, String deploymentId, String caseTemplate, Map<String, Object> params) {
+    private void activateCaseInstance(Long caseId, String deploymentId, String caseTemplate) {
 
         CaseInstance instance = caseInstances.get(caseId);
         for (CaseInstanceLifeCycleListener l : listeners) {
@@ -106,7 +104,7 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
         }
         instance.setStatus(CaseStatus.ACTIVE);
         DeployedUnit du = deploymentService.getDeployedUnit(deploymentId);
-        Long parentId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), caseTemplate, params);
+        Long parentId = processService.startProcess(du.getDeploymentUnit().getIdentifier(), caseTemplate, new HashMap<String, Object>());
         instance.setParentAdhocProcessInstance(parentId);
         for (CaseInstanceLifeCycleListener l : listeners) {
             l.afterCaseInstanceActive(instance);
@@ -206,6 +204,11 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
     }
 
     @Override
+    public CaseInstance getCaseInstanceById(Long caseId) {
+        return caseInstances.get(caseId);
+    }
+
+    @Override
     public void addCaseTask(Long caseId, CaseTask caseTask) {
         CaseInstance caseInstance = caseInstances.get(caseId);
         if (caseInstance.getStatus().equals(CaseStatus.ACTIVE)) {
@@ -285,5 +288,31 @@ public class CaseInstancesServiceCDIImpl implements CaseInstancesService {
     public void setUserTaskService(UserTaskService userTaskService) {
         this.userTaskService = userTaskService;
     }
+
+    public AdHocUserTaskService getAdHocTaskService() {
+        return adHocTaskService;
+    }
+
+    public void setAdHocTaskService(AdHocUserTaskService adHocTaskService) {
+        this.adHocTaskService = adHocTaskService;
+    }
+
+    public AdHocProcessService getAdHocProcessService() {
+        return adHocProcessService;
+    }
+
+    public void setAdHocProcessService(AdHocProcessService adHocProcessService) {
+        this.adHocProcessService = adHocProcessService;
+    }
+
+    public DeploymentService getDeploymentService() {
+        return deploymentService;
+    }
+
+    public void setDeploymentService(DeploymentService deploymentService) {
+        this.deploymentService = deploymentService;
+    }
+    
+    
 
 }
