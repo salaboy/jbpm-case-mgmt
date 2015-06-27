@@ -15,6 +15,7 @@
  */
 package org.jbpm.casemgmt.model;
 
+import java.util.Map;
 import org.jbpm.casemgmt.api.CaseTask;
 
 /**
@@ -22,21 +23,22 @@ import org.jbpm.casemgmt.api.CaseTask;
  * @author salaboy
  */
 public class CaseTaskImpl implements CaseTask {
-    
+
     private static Long idGenerator = 0L;
-    
+
     private Long id;
     private String name;
+    private Map<String, Object> params;
 
     public CaseTaskImpl() {
         this.id = ++idGenerator;
     }
 
-    public CaseTaskImpl(String name){
+    public CaseTaskImpl(String name) {
         this();
         this.name = name;
     }
-  
+
     @Override
     public Long getId() {
         return id;
@@ -46,5 +48,22 @@ public class CaseTaskImpl implements CaseTask {
     public String getName() {
         return name;
     }
-    
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Map<String, Object> getParams() {
+        return params;
+    }
+
+    public void setParams(Map<String, Object> params) {
+        this.params = params;
+    }
+
+    @Override
+    public String toString() {
+        return "CaseTaskImpl{" + "id=" + id + ", name=" + name + ", params=" + params + '}';
+    }
+
 }

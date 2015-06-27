@@ -25,11 +25,10 @@ import java.util.List;
 
 import org.drools.compiler.kie.builder.impl.InternalKieModule;
 import org.jbpm.casemgmt.api.CaseInstance;
+import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
-import org.jbpm.casemgmt.api.ProcessTask;
+import org.jbpm.casemgmt.model.CaseTaskImpl;
 import org.jbpm.casemgmt.model.HumanTaskImpl;
-import org.jbpm.casemgmt.model.ProcessTaskImpl;
-import org.jbpm.casemgmt.service.api.CaseInstancesService;
 import org.jbpm.kie.services.impl.KModuleDeploymentUnit;
 import org.jbpm.services.api.model.DeploymentUnit;
 import org.jbpm.services.api.model.ProcessInstanceDesc;
@@ -51,7 +50,7 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
     private static final Logger logger = LoggerFactory.getLogger(CaseServiceImplTest.class);
 
     private List<DeploymentUnit> units = new ArrayList<DeploymentUnit>();
-    
+
     @Before
     public void prepare() {
         configureServices();
@@ -117,9 +116,9 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
         units.add(deploymentUnit);
         MockCaseInstanceLifeCycleListener mockCaseInstanceLifeCycleListener = new MockCaseInstanceLifeCycleListener();
         caseService.registerLifeCycleListener(mockCaseInstanceLifeCycleListener);
-        
-        Long caseId = caseService.createCaseInstance("myFirst Case","salaboy@gmail.com",
-                                            deploymentUnit.getIdentifier(),"org.jbpm.examples.checklist.travel");
+
+        Long caseId = caseService.createCaseInstance("myFirst Case", "salaboy@gmail.com",
+                deploymentUnit.getIdentifier(), "org.jbpm.examples.checklist.travel");
 
         assertNotNull(caseId);
         List<String> users = new ArrayList<String>();
@@ -140,30 +139,30 @@ public abstract class CaseServiceImplTest extends CaseAbstractBaseTest {
         List<Long> tasksByProcessId = runtimeDataService.getTasksByProcessInstanceId(caseInstance.getParentAdhocProcessInstance());
         assertEquals(2, tasksByProcessId.size());
 
-        ProcessTask processTask = new ProcessTaskImpl();
-        processTask.setName("com.sample.bpmn");
-        caseService.addProcessTask(caseId, processTask);
+        CaseTask caseTask = new CaseTaskImpl();
+        caseTask.setName("com.sample.bpmn");
+        caseService.addSubCaseTask(caseId, caseTask);
 
         assertEquals(1, caseService.getCaseInstances(null).get(0).getProcessInstanceIds().size());
 
         List<TaskSummary> ts = caseService.getAllCaseHumanTasks(caseId);
         assertEquals(3, ts.size());
-        
+
         List<ProcessInstanceDesc> processInstances = caseService.getAllCaseProcessTasks(caseId);
         assertEquals(2, processInstances.size());
-        for(ProcessInstanceDesc pid : processInstances){
-            System.out.println("PID parent: "+pid.getParentId());
+        for (ProcessInstanceDesc pid : processInstances) {
+            System.out.println("PID parent: " + pid.getParentId());
             //Assert that one is the parent and the other the child
         }
-        
+
         caseService.suspendCaseInstance(caseId);
-        
+
         caseService.activateCaseInstance(caseId);
-        
-        for(String log : mockCaseInstanceLifeCycleListener.getLogs()){
+
+        for (String log : mockCaseInstanceLifeCycleListener.getLogs()) {
             System.out.println(log);
         }
-        
+
     }
 
 }

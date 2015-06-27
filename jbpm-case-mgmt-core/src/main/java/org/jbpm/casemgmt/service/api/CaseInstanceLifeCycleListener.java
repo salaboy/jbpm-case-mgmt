@@ -18,7 +18,6 @@ package org.jbpm.casemgmt.service.api;
 import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
-import org.jbpm.casemgmt.api.ProcessTask;
 
 /**
  *
@@ -35,8 +34,6 @@ public interface CaseInstanceLifeCycleListener {
     void afterCaseInstanceTerminated(CaseInstance instance);
     void beforeHumanTaskAdded(CaseInstance instance);
     void afterHumanTaskAdded(CaseInstance instance, HumanTask task);
-    void beforeProcessTaskAdded(CaseInstance instance);
-    void afterProcessTaskAdded(CaseInstance instance, ProcessTask process);
     void beforeCaseTaskAdded(CaseInstance instance);
     void afterCaseTaskAdded(CaseInstance instance, CaseTask caseTask);
 }

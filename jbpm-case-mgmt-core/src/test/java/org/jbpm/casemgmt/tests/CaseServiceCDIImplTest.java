@@ -99,7 +99,8 @@ public class CaseServiceCDIImplTest extends CaseServiceImplTest {
                 .addPackage("org.jbpm.casemgmt.impl")
                 .addPackage("org.jbpm.casemgmt.model")
                 .addPackage("org.jbpm.casemgmt.service.api")
-                .addPackage("org.jbpm.casemgmt.service.impl")
+                .addPackage("org.jbpm.casemgmt.service.cdi.impl")
+                .addPackage("org.jbpm.services.task.audit.service")
                 .addClass("org.jbpm.services.cdi.test.util.CDITestHelperNoTaskService")
                 
                 

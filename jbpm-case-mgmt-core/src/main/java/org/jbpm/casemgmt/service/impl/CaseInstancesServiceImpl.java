@@ -22,7 +22,6 @@ import java.util.Map;
 import org.jbpm.casemgmt.api.CaseInstance;
 import org.jbpm.casemgmt.api.CaseTask;
 import org.jbpm.casemgmt.api.HumanTask;
-import org.jbpm.casemgmt.api.ProcessTask;
 import org.jbpm.casemgmt.model.CaseInstanceImpl;
 import org.jbpm.casemgmt.model.CaseInstanceImpl.CaseStatus;
 import org.jbpm.casemgmt.service.api.CaseInstanceLifeCycleListener;
@@ -69,7 +68,7 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
 
     protected List<CaseInstanceLifeCycleListener> listeners = new ArrayList<CaseInstanceLifeCycleListener>();
 
-    public CaseInstancesServiceImpl() {
+    public CaseInstancesServiceImpl(boolean instanceWithoutCDI) {
     }
 
     @Override
@@ -183,25 +182,6 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
         }
     }
 
-    @Override
-    public void addProcessTask(Long caseId, ProcessTask processTask) {
-        CaseInstance instance = caseInstances.get(caseId);
-        if (instance.getStatus().equals(CaseStatus.ACTIVE)) {
-            for (CaseInstanceLifeCycleListener l : listeners) {
-                l.beforeProcessTaskAdded(instance);
-            }
-            DeployedUnit du = deploymentService.getDeployedUnits().iterator().next(); //@TODO implement resolution lookup
-
-            Long processId = adHocProcessService.startProcess(du.getDeploymentUnit().getIdentifier(), processTask.getName(), null,
-                    processTask.getParams(), instance.getParentAdhocProcessInstance());
-            caseInstances.get(caseId).addProcessTaskId(processId);
-            for (CaseInstanceLifeCycleListener l : listeners) {
-                l.afterProcessTaskAdded(instance, processTask);
-            }
-        } else {
-            throw new UnsupportedOperationException("A case must be Active in order to add a Process to it.");
-        }
-    }
 
     @Override
     public CaseInstance getCaseInstanceById(Long caseId) {
@@ -209,9 +189,20 @@ public class CaseInstancesServiceImpl implements CaseInstancesService {
     }
 
     @Override
-    public void addCaseTask(Long caseId, CaseTask caseTask) {
+    public void addSubCaseTask(Long caseId, CaseTask caseTask) {
         CaseInstance caseInstance = caseInstances.get(caseId);
         if (caseInstance.getStatus().equals(CaseStatus.ACTIVE)) {
+            for (CaseInstanceLifeCycleListener l : listeners) {
+                l.beforeCaseTaskAdded(caseInstance);
+            }
+            DeployedUnit du = deploymentService.getDeployedUnits().iterator().next(); //@TODO implement resolution lookup
+
+            Long processId = adHocProcessService.startProcess(du.getDeploymentUnit().getIdentifier(), caseTask.getName(), null,
+                    caseTask.getParams(), caseInstance.getParentAdhocProcessInstance());
+            caseInstances.get(caseId).addProcessTaskId(processId);
+            for (CaseInstanceLifeCycleListener l : listeners) {
+                l.afterCaseTaskAdded(caseInstance, caseTask);
+            }
         } else {
             throw new UnsupportedOperationException("A case must be Active in order to add a Sub Case to it.");
 

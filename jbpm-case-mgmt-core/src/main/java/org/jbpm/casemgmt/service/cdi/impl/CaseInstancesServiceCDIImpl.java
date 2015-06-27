@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jbpm.casemgmt.service.impl;
+package org.jbpm.casemgmt.service.cdi.impl;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import org.jbpm.casemgmt.service.impl.CaseInstancesServiceImpl;
 import org.jbpm.services.api.AdHocProcessService;
 import org.jbpm.services.api.AdHocUserTaskService;
 import org.jbpm.services.api.DeploymentService;
@@ -32,6 +33,7 @@ import org.jbpm.services.api.UserTaskService;
 public class CaseInstancesServiceCDIImpl extends CaseInstancesServiceImpl {
 
     public CaseInstancesServiceCDIImpl() {
+        super(true);
     }
 
     @Inject

@@ -52,7 +52,7 @@ import org.slf4j.LoggerFactory;
 
 public class JbpmCaseMgmtKieServerExtension implements KieServerExtension {
 
-    public static final String EXTENSION_NAME = "jBPM";
+    public static final String EXTENSION_NAME = "jBPMCASEMGMT";
 
     private static final Logger logger = LoggerFactory.getLogger(JbpmCaseMgmtKieServerExtension.class);
 

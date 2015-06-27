@@ -15,13 +15,21 @@
  */
 package org.jbpm.casemgmt.api;
 
+import java.util.Map;
+
 /**
  *
  * @author salaboy
  */
 public interface CaseTask {
+
     Long getId();
+
     String getName();
-    
-    
+
+    Map<String, Object> getParams();
+
+    void setName(String name);
+
+    void setParams(Map<String, Object> params);
 }
